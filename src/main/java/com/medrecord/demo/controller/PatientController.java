@@ -1,11 +1,9 @@
 package com.medrecord.demo.controller;
 
+import com.medrecord.demo.entity.MedicalRecord;
 import com.medrecord.demo.entity.Patient;
 import com.medrecord.demo.service.PatientService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/patient")
@@ -17,19 +15,24 @@ public class PatientController {
         this.patientService = patientService;
     }
 
+    @GetMapping
+    public Patient getPatientByID(@RequestParam Integer id) {
+        return patientService.findById(id);
+    }
 
-//    @GetMapping
-//    @ResponseBody
-//    public Optional<Patient> getPatientByID(@RequestParam Integer id) {
-//        return patientRepository.findById(id);
-//    }
+    @GetMapping("/{patientId}/medrecord")
+    public MedicalRecord findMedicalRecordByPatientId(@PathVariable Integer patientId) {
+        System.out.println(patientId);
+        return patientService.findMedicalRecordByPatientId(patientId);
+    }
 
     @PostMapping
     public Patient createPatient(@RequestBody Patient patient) {
-        System.out.println(patient.toString());
-        return patientService.savePatient(patient);
+        return patientService.save(patient);
     }
 
-
-
+    @PostMapping("/{patientId}/medrecord")
+    public MedicalRecord createMedicalRecord(@PathVariable Integer patientId, @RequestBody MedicalRecord medicalRecord ) {
+        return patientService.saveMedicalRecord(patientId, medicalRecord);
+    }
 }
