@@ -7,9 +7,9 @@ services:
     image: mysql:latest
     restart: always
     volumes:
-      - ./docker/mysql/init:/docker-entrypoint-initdb.d
-      - /data/mysql
+      - ./data/mysql/init.sql:/data/application/init.sql
     environment:
+      MYSQL_DATABASE: 'medrecord'
       MYSQL_USER: 'user'
       MYSQL_PASSWORD: 'password'
       MYSQL_ROOT_PASSWORD: 'password'
