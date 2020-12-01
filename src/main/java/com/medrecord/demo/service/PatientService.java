@@ -25,6 +25,10 @@ public class PatientService {
         return  patientRepository.findById(id).get();
     }
 
+    public void deletePatientById(Integer id) {
+        patientRepository.deleteById(id);
+    }
+
     public MedicalRecord findMedicalRecordByPatientId(Integer patientId) {
         Patient patient = patientRepository.findById(patientId).get();
         System.out.println(patient.toString());
@@ -35,5 +39,9 @@ public class PatientService {
         Patient patient = patientRepository.findById(patientId).get();
         medicalRecord.setPatient(patient);
         return medicalRecordRepository.save(medicalRecord);
+    }
+
+    public void deleteMedicalRecordByPatientId(Integer id) {
+        medicalRecordRepository.deleteById(id);
     }
 }

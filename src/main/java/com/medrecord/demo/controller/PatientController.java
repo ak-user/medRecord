@@ -22,8 +22,12 @@ public class PatientController {
 
     @GetMapping("/{patientId}/medrecord")
     public MedicalRecord findMedicalRecordByPatientId(@PathVariable Integer patientId) {
-        System.out.println(patientId);
         return patientService.findMedicalRecordByPatientId(patientId);
+    }
+
+    @DeleteMapping("/{patientId}")
+    public void deletePatientById(@PathVariable Integer patientId) {
+        patientService.deletePatientById(patientId);
     }
 
     @PostMapping
@@ -34,5 +38,10 @@ public class PatientController {
     @PostMapping("/{patientId}/medrecord")
     public MedicalRecord createMedicalRecord(@PathVariable Integer patientId, @RequestBody MedicalRecord medicalRecord ) {
         return patientService.saveMedicalRecord(patientId, medicalRecord);
+    }
+
+    @DeleteMapping("/{patientId}/medrecord/{recordId}")
+    public void deleteMedicalRecordByPatientId(@PathVariable Integer recordId) {
+        patientService.deleteMedicalRecordByPatientId(recordId);
     }
 }
