@@ -31,7 +31,6 @@ public class PatientService {
 
     public MedicalRecord findMedicalRecordByPatientId(Integer patientId) {
         Patient patient = patientRepository.findById(patientId).get();
-        System.out.println(patient.toString());
         return medicalRecordRepository.findMedicalRecordByPatient(patient).get();
     }
 

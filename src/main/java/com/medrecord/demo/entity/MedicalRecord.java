@@ -20,8 +20,8 @@ public class MedicalRecord {
     @Column
     private String date;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id")
     private Patient patient;
 
     public Integer getId() {
