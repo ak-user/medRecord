@@ -3,6 +3,7 @@ package com.medrecord.demo.controller;
 import com.medrecord.demo.entity.MedicalRecord;
 import com.medrecord.demo.entity.Patient;
 import com.medrecord.demo.service.PatientService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,13 +17,13 @@ public class PatientController {
     }
 
     @GetMapping
-    public Patient getPatientByID(@RequestParam Integer id) {
+    public Patient getPatientById(@RequestParam Integer id) {
         return patientService.findById(id);
     }
 
-    @GetMapping("/{patientId}/medrecord")
-    public MedicalRecord findMedicalRecordByPatientId(@PathVariable Integer patientId) {
-        return patientService.findMedicalRecordByPatientId(patientId);
+    @PostMapping
+    public Patient createPatient(@RequestBody Patient patient) {
+        return patientService.save(patient);
     }
 
     @DeleteMapping("/{patientId}")
@@ -30,9 +31,16 @@ public class PatientController {
         patientService.deletePatientById(patientId);
     }
 
-    @PostMapping
-    public Patient createPatient(@RequestBody Patient patient) {
-        return patientService.save(patient);
+    @PutMapping
+    public ResponseEntity<Patient> updatePaatientById(@RequestBody Patient patient, @RequestParam Integer id) {
+        return patientService.updatePatientById(patient, id);
+    }
+
+
+
+    @GetMapping("/{patientId}/medrecord")
+    public MedicalRecord findMedicalRecordByPatientId(@PathVariable Integer patientId) {
+        return patientService.findMedicalRecordByPatientId(patientId);
     }
 
     @PostMapping("/{patientId}/medrecord")

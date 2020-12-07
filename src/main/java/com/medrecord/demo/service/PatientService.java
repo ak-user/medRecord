@@ -4,7 +4,11 @@ import com.medrecord.demo.entity.MedicalRecord;
 import com.medrecord.demo.entity.Patient;
 import com.medrecord.demo.repository.MedicalRecordRepository;
 import com.medrecord.demo.repository.PatientRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class PatientService {
@@ -27,6 +31,16 @@ public class PatientService {
 
     public void deletePatientById(Integer id) {
         patientRepository.deleteById(id);
+    }
+
+    public ResponseEntity<Patient> updatePatientById(Patient newPatient, Integer id) {
+
+        Optional<Patient> patientOptional = patientRepository.findById(id);
+        if (patientOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        newPatient.setId(id);
+        return new ResponseEntity<>(patientRepository.save(newPatient), HttpStatus.OK);
     }
 
     public MedicalRecord findMedicalRecordByPatientId(Integer patientId) {

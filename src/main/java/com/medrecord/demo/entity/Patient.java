@@ -1,6 +1,7 @@
 package com.medrecord.demo.entity;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "patients")
@@ -18,7 +19,10 @@ public class Patient {
     private String lastName;
 
     @Column
-    private String dob;
+    private String email;
+
+    @Column
+    private LocalDate dob;
 
     @Column
     private String gender;
@@ -47,11 +51,19 @@ public class Patient {
         this.lastName = lastName;
     }
 
-    public String getDob() {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public LocalDate getDob() {
         return dob;
     }
 
-    public void setDob(String dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
 
