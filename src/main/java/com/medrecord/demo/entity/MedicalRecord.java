@@ -1,6 +1,7 @@
 package com.medrecord.demo.entity;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "medicalRecords")
@@ -18,7 +19,7 @@ public class MedicalRecord {
     private String info;
 
     @Column
-    private String date;
+    private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id")
@@ -48,11 +49,11 @@ public class MedicalRecord {
         this.info = info;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

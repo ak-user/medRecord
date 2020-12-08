@@ -32,7 +32,7 @@ public class PatientController {
     }
 
     @PutMapping
-    public ResponseEntity<Patient> updatePaatientById(@RequestBody Patient patient, @RequestParam Integer id) {
+    public ResponseEntity<Patient> updatePatientById(@RequestBody Patient patient, @RequestParam Integer id) {
         return patientService.updatePatientById(patient, id);
     }
 

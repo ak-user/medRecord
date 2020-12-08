@@ -1,0 +1,45 @@
+### Get existing patient 6
+GET {{med-record}}/patient?id=6
+
+### Create patient
+POST {{med-record}}/patient
+Content-Type: application/json
+
+{
+  "firstName": "Abraham",
+  "lastName": "Lincoln",
+  "gender": "male",
+  "email": "the.greatest@gmail.com",
+  "dob": "1809-02-12T22:18:26.625Z"
+}
+
+### Delete patient 6
+DELETE {{med-record}}/patient/6
+
+### Update patient 6
+PUT {{med-record}}/patient?id=6
+Content-Type: application/json
+
+{
+  "firstName": "Matviy",
+  "lastName": "Kopchak",
+  "gender": "male",
+  "email": "matvii.kopchak@gmail.com",
+  "dob": "1992-02-14T22:18:26.625Z"
+}
+
+### Find medical record by patient id 6
+GET {{med-record}}/patient/6/medrecord
+
+### Create medical record
+POST {{med-record}}/patient/6/medrecord
+Content-Type: application/json
+
+{
+ "doctorName": "Greg",
+  "info": "nothing",
+  "date": "2020-02-10T22:18:26.625Z"
+}
+
+### Delete medical record by patient id
+DELETE {{med-record}}/patient/6/medrecord/1
