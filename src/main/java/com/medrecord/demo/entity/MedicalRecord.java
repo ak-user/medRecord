@@ -25,6 +25,24 @@ public class MedicalRecord {
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
+    public MedicalRecord() {
+    }
+
+    public MedicalRecord(Integer id, String doctorName, String info, LocalDate date, Patient patient) {
+        this.id = id;
+        this.doctorName = doctorName;
+        this.info = info;
+        this.date = date;
+        this.patient = patient;
+    }
+
+    public MedicalRecord(String doctorName, String info, LocalDate date, Patient patient) {
+        this.doctorName = doctorName;
+        this.info = info;
+        this.date = date;
+        this.patient = patient;
+    }
+
     public Integer getId() {
         return id;
     }

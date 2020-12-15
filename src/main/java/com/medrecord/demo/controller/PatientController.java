@@ -1,10 +1,13 @@
 package com.medrecord.demo.controller;
 
+import com.medrecord.demo.dto.PatientSearchParams;
 import com.medrecord.demo.entity.MedicalRecord;
 import com.medrecord.demo.entity.Patient;
 import com.medrecord.demo.service.PatientService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/patient")
@@ -34,6 +37,11 @@ public class PatientController {
     @PutMapping
     public ResponseEntity<Patient> updatePatientById(@RequestBody Patient patient, @RequestParam Integer id) {
         return patientService.updatePatientById(patient, id);
+    }
+
+    @PostMapping("/_search")
+    public ResponseEntity<List<Patient>> searchPatients(@RequestBody PatientSearchParams searchParams) {
+        return patientService.searchPatients(searchParams);
     }
 
 

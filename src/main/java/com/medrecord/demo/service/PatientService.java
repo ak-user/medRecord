@@ -1,5 +1,6 @@
 package com.medrecord.demo.service;
 
+import com.medrecord.demo.dto.PatientSearchParams;
 import com.medrecord.demo.entity.MedicalRecord;
 import com.medrecord.demo.entity.Patient;
 import com.medrecord.demo.repository.MedicalRecordRepository;
@@ -8,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,6 +45,24 @@ public class PatientService {
         newPatient.setId(id);
         return new ResponseEntity<>(patientRepository.save(newPatient), HttpStatus.OK);
     }
+
+    public ResponseEntity<List<Patient>> searchPatients(PatientSearchParams searchParams) {
+
+        Optional<List<Patient>> patientListOptional = patientRepository
+                .findByFirstNameContainingOrLastNameContainingOrEmailContainingAndDobBetween(
+                        searchParams.getSearchPhrase(),
+                        searchParams.getSearchPhrase(),
+                        searchParams.getSearchPhrase(),
+                        searchParams.getDobFrom(),
+                        searchParams.getDobTo()
+                );
+        if (patientListOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(patientListOptional.get(), HttpStatus.OK);
+    }
+
+
 
     public MedicalRecord findMedicalRecordByPatientId(Integer patientId) {
         Patient patient = patientRepository.findById(patientId).get();

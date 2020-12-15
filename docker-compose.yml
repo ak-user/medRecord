@@ -7,7 +7,7 @@ services:
     image: mysql:latest
     restart: always
     volumes:
-      - ./data/mysql/init.sql:/data/application/init.sql
+      - ./data/mysql/init:/data/application/init.sql
     environment:
       MYSQL_DATABASE: 'medrecord'
       MYSQL_USER: 'user'

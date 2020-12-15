@@ -12,6 +12,46 @@ Content-Type: application/json
   "email": "the.greatest@gmail.com",
   "dob": "1809-02-12T22:18:26.625Z"
 }
+//
+//{
+//  "firstName": "Ahmed",
+//  "lastName": "Beverly",
+//  "gender": "male",
+//  "email": "the.greatest@gmail.com",
+//  "dob": "1994-02-14T22:18:26.625Z"
+//}
+//
+//{
+//  "firstName": "Joe",
+//  "lastName": "Rhodes",
+//  "gender": "male",
+//  "email": "joe.rhodes@example.com",
+//  "dob": "1998-07-09T22:18:26.625Z"
+//}
+//
+//{
+//  "firstName": "Brianna",
+//  "lastName": "George",
+//  "gender": "female",
+//  "email": "brianna.george@example.com",
+//  "dob": "1974-06-06T22:18:26.625Z"
+//}
+//
+//{
+//  "firstName": "Olivia",
+//  "lastName": "Moore",
+//  "gender": "female",
+//  "email": "olivia.moore@example.com",
+//  "dob": "1978-11-07T22:18:26.625Z"
+//}
+//
+//{
+//  "firstName": "Savannah",
+//  "lastName": "Rodriguez",
+//  "gender": "female",
+//  "email": "savannah.rodriguez@example.com",
+//  "dob": "1982-07-07T22:18:26.625Z"
+//}
 
 ### Delete patient 6
 DELETE {{med-record}}/patient/6
@@ -28,6 +68,17 @@ Content-Type: application/json
   "dob": "1992-02-14T22:18:26.625Z"
 }
 
+### search patiants
+
+POST {{med-record}}/patient/_search
+Content-Type: application/json
+
+{
+  "searchPhrase": "Sav",
+  "dobFrom": "1900-02-14T22:18:26.625Z",
+  "dobTo": "2000-02-14T22:18:26.625Z"
+}
+
 ### Find medical record by patient id 6
 GET {{med-record}}/patient/6/medrecord
 
@@ -36,9 +87,21 @@ POST {{med-record}}/patient/6/medrecord
 Content-Type: application/json
 
 {
- "doctorName": "Greg",
+  "doctorName": "Greg",
   "info": "nothing",
   "date": "2020-02-10T22:18:26.625Z"
+}
+
+### Search patients
+# searchString - має співпадати з частиною імені, фамілії чи емейлом
+# dobFrom, dobTo - фільтрує по даті народження
+POST {{med-record}}/patient/_search
+Content-Type: application/json
+
+{
+  "searchString": "Greg",
+  "dobFrom": "2000-02-10T22:18:26.625Z",
+  "dobTo": "2020-02-10T22:18:26.625Z"
 }
 
 ### Delete medical record by patient id

@@ -27,6 +27,26 @@ public class Patient {
     @Column
     private String gender;
 
+    public Patient() {
+    }
+
+    public Patient(String firstName, String lastName, String email, LocalDate dob, String gender) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.dob = dob;
+        this.gender = gender;
+    }
+
+    public Patient(Integer id, String firstName, String lastName, String email, LocalDate dob, String gender) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.dob = dob;
+        this.gender = gender;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -78,9 +98,11 @@ public class Patient {
     @Override
     public String toString() {
         return "Patient{" +
-                "firstName='" + firstName + '\'' +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", dob='" + dob + '\'' +
+                ", email='" + email + '\'' +
+                ", dob=" + dob +
                 ", gender='" + gender + '\'' +
                 '}';
     }
