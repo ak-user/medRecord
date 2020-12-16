@@ -1,5 +1,6 @@
 package com.medrecord.demo.service;
 
+import com.medrecord.demo.controller.InvalidRequestException;
 import com.medrecord.demo.dto.PatientSearchParams;
 import com.medrecord.demo.entity.MedicalRecord;
 import com.medrecord.demo.entity.Patient;
@@ -9,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +25,16 @@ public class PatientService {
     }
 
     public Patient save(Patient patient) {
+        Optional<List<Patient>> patientList = patientRepository.findByFirstNameContainingAndLastNameContainingAndDob(
+                patient.getFirstName(),
+                patient.getLastName(),
+                patient.getDob()
+        );
+
+        if (patientList.isPresent() && patientList.get().size() != 0) {
+            throw new InvalidRequestException("Invalid patient for create, patient with FN, LN, DOB already exist");
+        }
+
         return patientRepository.save(patient);
     }
 
@@ -56,9 +66,6 @@ public class PatientService {
                         searchParams.getDobFrom(),
                         searchParams.getDobTo()
                 );
-        if (patientListOptional.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         return new ResponseEntity<>(patientListOptional.get(), HttpStatus.OK);
     }
 
