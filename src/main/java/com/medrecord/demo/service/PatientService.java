@@ -25,6 +25,18 @@ public class PatientService {
     }
 
     public Patient save(Patient patient) {
+        if (patient.getFirstName().length() < 3) {
+            throw new InvalidRequestException("First name must be more than 3 characters");
+        }
+
+        if (patient.getLastName().length() < 3) {
+            throw new InvalidRequestException("Last name must be more than 3 characters");
+        }
+
+        if (patient.getEmail().length() < 3) {
+            throw new InvalidRequestException("Email must be more than 3 characters");
+        }
+
         Optional<List<Patient>> patientList = patientRepository.findByFirstNameContainingAndLastNameContainingAndDob(
                 patient.getFirstName(),
                 patient.getLastName(),
@@ -33,6 +45,13 @@ public class PatientService {
 
         if (patientList.isPresent() && patientList.get().size() != 0) {
             throw new InvalidRequestException("Invalid patient for create, patient with FN, LN, DOB already exist");
+        }
+
+
+        Optional<List<Patient>> foundedPatientsWithEmail = patientRepository.findByEmail(patient.getEmail());
+
+        if (foundedPatientsWithEmail.isPresent() && foundedPatientsWithEmail.get().size() != 0) {
+            throw new InvalidRequestException("You can't use this email. Current email '" + patient.getEmail() + "' exist");
         }
 
         return patientRepository.save(patient);

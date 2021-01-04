@@ -7,6 +7,15 @@ public class PatientSearchParams {
     private LocalDate dobFrom;
     private LocalDate dobTo;
 
+    public PatientSearchParams() {
+    }
+
+    public PatientSearchParams(String searchPhrase, LocalDate dobFrom, LocalDate dobTo) {
+        this.searchPhrase = searchPhrase;
+        this.dobFrom = dobFrom;
+        this.dobTo = dobTo;
+    }
+
     public String getSearchPhrase() {
         return searchPhrase;
     }

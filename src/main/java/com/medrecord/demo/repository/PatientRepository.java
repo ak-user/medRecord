@@ -24,4 +24,6 @@ public interface PatientRepository extends CrudRepository<Patient, Integer> {
             LocalDate dob
     );
 
+    Optional<List<Patient>> findByEmail(String email);
+
 }

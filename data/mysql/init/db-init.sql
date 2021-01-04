@@ -20,14 +20,13 @@ create table if not exists patients
 );
 
 
-INSERT INTO patients(id, first_name, last_name, gender, dob) VALUES (10001, 'Georgi', 'Facello', 'M');
-INSERT INTO patients(id, first_name, last_name, gender, dob) VALUES (10002, 'Bezalel', 'Simmel', 'F');
-INSERT INTO patients(id, first_name, last_name, gender, dob) VALUES (10003, 'Parto', 'Bamford', 'M');
-INSERT INTO patients(id, first_name, last_name, gender, dob) VALUES (10004, 'Chirstian', 'Koblick', 'M');
-INSERT INTO patients(id, first_name, last_name, gender, dob) VALUES (10005, 'Kyoichi', 'Maliniak', 'M');
-INSERT INTO patients(id, first_name, last_name, gender, dob) VALUES (10006, 'Anneke', 'Preusig', 'F');
-INSERT INTO patients(id, first_name, last_name, gender, dob) VALUES (10007, 'Tzvetan', 'Zielinski', 'F');
-INSERT INTO patients(id, first_name, last_name, gender, dob) VALUES (10008, 'Saniya', 'Kalloufi', 'M');
-INSERT INTO patients(id, first_name, last_name, gender, dob) VALUES (10009, 'Sumant', 'Peac', 'F');
-INSERT INTO patients(id, first_name, last_name, gender, dob) VALUES (10010, 'Duangkaew', 'Piveteau', 'F');
-dob
+INSERT INTO patients(id, first_name, last_name, gender, email, dob) VALUES (10001, 'Georgi', 'Facello', 'male', 'georgi.facello@example.com', '1994-02-14T22:18:26.625Z');
+INSERT INTO patients(id, first_name, last_name, gender, email, dob) VALUES (10002, 'Bezalel', 'Simmel', 'female', 'bezalel.simmel@example.com', '1998-07-09T22:18:26.625Z');
+INSERT INTO patients(id, first_name, last_name, gender, email, dob) VALUES (10003, 'Parto', 'Bamford', 'male', 'parto.bamford@example.com', '1974-06-06T22:18:26.625Z');
+INSERT INTO patients(id, first_name, last_name, gender, email, dob) VALUES (10004, 'Chirstian', 'Koblick', 'male', 'chirstian.koblick@example.com', '1978-11-07T22:18:26.625Z');
+INSERT INTO patients(id, first_name, last_name, gender, email, dob) VALUES (10005, 'Kyoichi', 'Maliniak', 'male', 'kyoichi.maliniak@example.com', '1982-07-07T22:18:26.625Z');
+INSERT INTO patients(id, first_name, last_name, gender, email, dob) VALUES (10006, 'Anneke', 'Preusig', 'female', 'anneke.preusig@example.com', '1942-07-23T22:18:26.625Z');
+INSERT INTO patients(id, first_name, last_name, gender, email, dob) VALUES (10007, 'Tzvetan', 'Zielinski', 'female', 'tzvetan.zielinski@example.com', '1932-07-07T22:18:26.625Z');
+INSERT INTO patients(id, first_name, last_name, gender, email, dob) VALUES (10008, 'Saniya', 'Kalloufi', 'male', 'saniya.kalloufi@example.com', '1922-07-09T22:18:26.625Z');
+INSERT INTO patients(id, first_name, last_name, gender, email, dob) VALUES (10009, 'Sumant', 'Peac', 'female', 'sumant.peac@example.com', '1934-02-06T22:18:26.625Z');
+INSERT INTO patients(id, first_name, last_name, gender, email, dob) VALUES (10010, 'Duangkaew', 'Piveteau', 'female', 'duangkaew.piveteau@example.com', '1934-02-08T22:18:26.625Z');

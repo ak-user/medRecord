@@ -10,12 +10,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-//
-//    @ExceptionHandler(Exception.class)
-//    protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
-//        String bodyOfResponse = "This should be application specific";
-//        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
-//    }
 
     @ExceptionHandler(InvalidRequestException.class)
     protected ResponseEntity<Object> handleInvalidRequest(InvalidRequestException ex, WebRequest request) {
