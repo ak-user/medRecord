@@ -1,8 +1,18 @@
 package com.medrecord.demo.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import lombok.*;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "patients")
 public class Patient {
@@ -21,89 +31,11 @@ public class Patient {
     @Column
     private String email;
 
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     @Column
     private LocalDate dob;
 
     @Column
     private String gender;
-
-    public Patient() {
-    }
-
-    public Patient(String firstName, String lastName, String email, LocalDate dob, String gender) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.dob = dob;
-        this.gender = gender;
-    }
-
-    public Patient(Integer id, String firstName, String lastName, String email, LocalDate dob, String gender) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.dob = dob;
-        this.gender = gender;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public LocalDate getDob() {
-        return dob;
-    }
-
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    @Override
-    public String toString() {
-        return "Patient{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", dob=" + dob +
-                ", gender='" + gender + '\'' +
-                '}';
-    }
 }

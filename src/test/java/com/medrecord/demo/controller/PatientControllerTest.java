@@ -1,140 +1,175 @@
 package com.medrecord.demo.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.medrecord.demo.dto.PatientSearchParams;
 import com.medrecord.demo.entity.MedicalRecord;
 import com.medrecord.demo.entity.Patient;
 import com.medrecord.demo.service.PatientService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+@RunWith(SpringRunner.class)
+@WebMvcTest(PatientController.class)
 class PatientControllerTest {
 
-    @Mock
+
+    @Autowired
+    private MockMvc mvc;
+
+    @MockBean
     PatientService patientService;
 
     @InjectMocks
     PatientController patientController;
 
     @Test
-    void getPatientById() {
+    void getPatientById() throws Exception {
         LocalDate date = LocalDate.parse("1809-02-12");
-        Patient patient = new Patient(
-                1,
-                "Abraham",
-                "Lincoln",
-                "the.greatest@gmail.com",
-                date,
-                "male"
-        );
+        Patient patient = Patient.builder()
+                .id(1)
+                .firstName("Abraham")
+                .lastName("Lincoln")
+                .email("the.greatest@gmail.com")
+                .dob(date)
+                .gender("male")
+                .build();
 
         when(patientService.findById(1)).thenReturn(patient);
 
-        Patient result = patientController.getPatientById(1);
-
-        verify(patientService, times(1)).findById(1);
-        assertThat(result).isEqualTo(patient);
+        mvc.perform(get("/patient?id=1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", is(patient.getFirstName())));
     }
 
     @Test
-    void createPatient() {
+    void createPatient() throws Exception {
         LocalDate date = LocalDate.parse("1809-02-12");
-        Patient patientReq = new Patient(
-                "Abraham",
-                "Lincoln",
-                "the.greatest@gmail.com",
-                date,
-                "male"
-        );
-        Patient patientResp = new Patient(
-                1,
-                "Abraham",
-                "Lincoln",
-                "the.greatest@gmail.com",
-                date,
-                "male"
-        );
+
+        Patient patientReq = Patient.builder()
+                .firstName("Abraham")
+                .lastName("Lincoln")
+                .email("the.greatest@gmail.com")
+                .dob(date)
+                .gender("male")
+                .build();
+
+        Patient patientResp = Patient.builder()
+                .id(1)
+                .firstName("Abraham")
+                .lastName("Lincoln")
+                .email("the.greatest@gmail.com")
+                .dob(date)
+                .gender("male")
+                .build();
+
         when(patientService.save(patientReq)).thenReturn(patientResp);
 
-        Patient result = patientController.createPatient(patientReq);
-
-        verify(patientService, times(1)).save(patientReq);
-        assertThat(result).isEqualTo(patientResp);
+        mvc.perform(post("/patient")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(patientReq)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", is(patientResp.getFirstName())));
     }
 
     @Test
-    void deletePatientById() {
-        patientController.deletePatientById(1);
-        verify(patientService, times(1)).deletePatientById(1);
+    void createPatientWithoutBody() throws Exception {
+        mvc.perform(post("/patient")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
-    void updatePatientById() {
+    void createPatientWithLessThanTreeLetters() throws Exception {
+        when(patientService.save(any())).thenThrow( new InvalidRequestException("First name must be more than 3 characters"));
+
+        mvc.perform(post("/patient")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deletePatientById() throws Exception {
+        mvc.perform(delete("/patient/1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void updatePatientById() throws Exception {
 
         LocalDate date = LocalDate.parse("1992-02-14");
-        Patient patientReq = new Patient(
-                "Anton",
-                "Boss",
-                "the.greatest@gmail.com",
-                date,
-                "male"
-        );
+        Patient patientReq = Patient.builder()
+                .firstName("Anton")
+                .lastName("Boss")
+                .email("the.greatest@gmail.com")
+                .dob(date)
+                .gender("male")
+                .build();
 
-        Patient patientResp = new Patient(
-                1,
-                "Anton",
-                "Boss",
-                "the.greatest@gmail.com",
-                date,
-                "male"
-        );
+        Patient patientResp = Patient.builder()
+                .id(1)
+                .firstName("Anton")
+                .lastName("Boss")
+                .email("the.greatest@gmail.com")
+                .dob(date)
+                .gender("male")
+                .build();
 
         ResponseEntity<Patient> responseEntity = new ResponseEntity<>(patientResp, HttpStatus.OK);
 
         when(patientService.updatePatientById(patientReq, 1)).thenReturn(responseEntity);
 
-        ResponseEntity<Patient> result = patientController.updatePatientById(patientReq, 1);
-
-        verify(patientService, times(1)).updatePatientById(patientReq, 1);
-        assertThat(result.getBody()).isEqualTo(patientResp);
+        mvc.perform(put("/patient?id=1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(patientReq)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", is(patientResp.getFirstName())));
     }
 
     @Test
-    void searchPatients() {
+    void searchPatients() throws Exception {
         LocalDate date = LocalDate.parse("1992-02-14");
 
+        Patient patientRespOne = Patient.builder()
+                .id(1)
+                .firstName("Anton")
+                .lastName("Boss")
+                .email("the.greatest@gmail.com")
+                .dob(date)
+                .gender("male")
+                .build();
 
-        Patient patientRespOne = new Patient(
-                1,
-                "Anton",
-                "Boss",
-                "the.greatest@gmail.com",
-                date,
-                "male"
-        );
-
-        Patient patientRespSecond = new Patient(
-                1,
-                "Matviy",
-                "Boss",
-                "the.greatest2@gmail.com",
-                date,
-                "male"
-        );
+        Patient patientRespSecond = Patient.builder()
+                .id(2)
+                .firstName("Matviy")
+                .lastName("Boss")
+                .email("the.greatest2@gmail.com")
+                .dob(date)
+                .gender("male")
+                .build();
 
         List<Patient> patients = new ArrayList<>();
         patients.add(patientRespOne);
@@ -147,44 +182,85 @@ class PatientControllerTest {
         PatientSearchParams patientSearchParams = new PatientSearchParams("Boss", dobFrom, dobTo);
         when(patientService.searchPatients(patientSearchParams)).thenReturn(responseEntity);
 
-        ResponseEntity<List<Patient>> result = patientController.searchPatients(patientSearchParams);
-
-        verify(patientService, times(1)).searchPatients(patientSearchParams);
-        assertThat(Objects.requireNonNull(result.getBody()).size()).isEqualTo(2);
+        mvc.perform(post("/patient/_search")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(patientSearchParams)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].firstName", is(patientRespOne.getFirstName())));
     }
 
     @Test
-    void findMedicalRecordByPatientId() {
+    void findMedicalRecordByPatientId() throws Exception {
         LocalDate date = LocalDate.parse("1809-02-12");
-        Patient patient = new Patient(1,"Abraham", "Lincoln", "the.greatest@gmail.com", date, "male");
-        MedicalRecord medicalRecord = new MedicalRecord(2, "Greg", "test info", date, patient);
+        Patient patient = Patient.builder()
+                .id(1)
+                .firstName("Abraham")
+                .lastName("Lincoln")
+                .email("the.greatest@gmail.com")
+                .dob(date)
+                .gender("male")
+                .build();
 
-        when(patientService.findMedicalRecordByPatientId(2)).thenReturn(medicalRecord);
+        MedicalRecord medicalRecord = MedicalRecord.builder()
+                .id(2)
+                .doctorName("Greg")
+                .info("test info")
+                .date(date)
+                .patient(patient)
+                .build();
 
-        MedicalRecord result = patientController.findMedicalRecordByPatientId(2);
+        when(patientService.findMedicalRecordByPatientId(1)).thenReturn(medicalRecord);
 
-        verify(patientService, times(1)).findMedicalRecordByPatientId(2);
-        assertThat(result).isEqualTo(medicalRecord);
+        mvc.perform(get("/patient/1/medrecord")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.doctorName", is(medicalRecord.getDoctorName())));
+
     }
 
     @Test
-    void createMedicalRecord() {
+    void createMedicalRecord() throws Exception {
         LocalDate date = LocalDate.parse("1809-02-12");
-        Patient patient = new Patient(1,"Abraham", "Lincoln", "the.greatest@gmail.com", date, "male");
-        MedicalRecord medicalRecordReq = new MedicalRecord("Greg", "test info", date, patient);
-        MedicalRecord medicalRecordResp = new MedicalRecord(2, "Greg", "test info", date, patient);
+        Patient patient = Patient.builder()
+                .id(1)
+                .firstName("Abraham")
+                .lastName("Lincoln")
+                .email("the.greatest@gmail.com")
+                .dob(date)
+                .gender("male")
+                .build();
+
+
+        MedicalRecord medicalRecordReq = MedicalRecord.builder()
+                .doctorName("Greg")
+                .info("test info")
+                .date(date)
+                .patient(patient)
+                .build();
+
+        MedicalRecord medicalRecordResp = MedicalRecord.builder()
+                .id(2)
+                .doctorName("Greg")
+                .info("test info")
+                .date(date)
+                .patient(patient)
+                .build();
 
         when(patientService.saveMedicalRecord(1, medicalRecordReq)).thenReturn(medicalRecordResp);
 
-        MedicalRecord result = patientController.createMedicalRecord(1, medicalRecordReq);
+        mvc.perform(post("/patient/1/medrecord")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(medicalRecordReq)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.doctorName", is(medicalRecordResp.getDoctorName())));
 
-        verify(patientService, times(1)).saveMedicalRecord(1, medicalRecordReq);
-        assertThat(result).isEqualTo(medicalRecordResp);
     }
 
     @Test
-    void deleteMedicalRecordByPatientId() {
-        patientController.deleteMedicalRecordByPatientId(2);
-        verify(patientService, times(1)).deleteMedicalRecordByPatientId(2);
+    void deleteMedicalRecordByPatientId() throws Exception {
+
+        mvc.perform(delete("/patient/1/medrecord/1"))
+                .andExpect(status().isOk());
+
     }
 }

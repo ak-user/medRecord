@@ -32,8 +32,22 @@ class PatientServiceTest {
     @Test
     void save() {
         LocalDate date = LocalDate.parse("1809-02-12");
-        Patient patientReq = new Patient("Abraham", "Lincoln", "the.greatest@gmail.com", date, "male");
-        Patient patientResp = new Patient(1,"Abraham", "Lincoln", "the.greatest@gmail.com", date, "male");
+        Patient patientReq = Patient.builder()
+                .firstName("Abraham")
+                .lastName("Lincoln")
+                .email("the.greatest@gmail.com")
+                .dob(date)
+                .gender("male")
+                .build();
+
+        Patient patientResp = Patient.builder()
+                .id(1)
+                .firstName("Abraham")
+                .lastName("Lincoln")
+                .email("the.greatest@gmail.com")
+                .dob(date)
+                .gender("male")
+                .build();
 
         when(patientRepository.save(patientReq)).thenReturn(patientResp);
 
@@ -46,7 +60,14 @@ class PatientServiceTest {
     @Test
     void findById() {
         LocalDate date = LocalDate.parse("1809-02-12");
-        Patient patientResp = new Patient(1,"Abraham", "Lincoln", "the.greatest@gmail.com", date, "male");
+        Patient patientResp = Patient.builder()
+                .id(1)
+                .firstName("Abraham")
+                .lastName("Lincoln")
+                .email("the.greatest@gmail.com")
+                .dob(date)
+                .gender("male")
+                .build();
 
         when(patientRepository.findById(1)).thenReturn(java.util.Optional.of(patientResp));
 
@@ -65,10 +86,32 @@ class PatientServiceTest {
     @Test
     void updatePatientById() {
         LocalDate date = LocalDate.parse("1809-02-12");
-        Patient patientResp = new Patient(1,"Abraham", "Lincoln", "the.greatest@gmail.com", date, "male");
 
-        Patient newPatient = new Patient("Bob", "Marley", "the.cool@gmail.com", date, "male");
-        Patient newPatientResp = new Patient(1,"Bob", "Marley", "the.cool@gmail.com", date, "male");
+        Patient patientResp = Patient.builder()
+                .id(1)
+                .firstName("Abraham")
+                .lastName("Lincoln")
+                .email("the.greatest@gmail.com")
+                .dob(date)
+                .gender("male")
+                .build();
+
+        Patient newPatient = Patient.builder()
+                .firstName("Bob")
+                .lastName("Marley")
+                .email("the.cool@gmail.com")
+                .dob(date)
+                .gender("male")
+                .build();
+
+        Patient newPatientResp = Patient.builder()
+                .id(1)
+                .firstName("Bob")
+                .lastName("Marley")
+                .email("the.cool@gmail.com")
+                .dob(date)
+                .gender("male")
+                .build();
 
         when(patientRepository.findById(1)).thenReturn(java.util.Optional.of(patientResp));
         when(patientRepository.save(newPatient)).thenReturn(newPatientResp);
@@ -84,8 +127,22 @@ class PatientServiceTest {
     @Test
     void findMedicalRecordByPatientId() {
         LocalDate date = LocalDate.parse("1809-02-12");
-        Patient patientResp = new Patient(1,"Abraham", "Lincoln", "the.greatest@gmail.com", date, "male");
-        MedicalRecord medicalRecordResp = new MedicalRecord(2, "Greg", "test info", date, patientResp);
+        Patient patientResp = Patient.builder()
+                .id(1)
+                .firstName("Abraham")
+                .lastName("Lincoln")
+                .email("the.greatest@gmail.com")
+                .dob(date)
+                .gender("male")
+                .build();
+
+        MedicalRecord medicalRecordResp = MedicalRecord.builder()
+                .id(2)
+                .doctorName("Greg")
+                .info("test info")
+                .date(date)
+                .patient(patientResp)
+                .build();
 
         when(patientRepository.findById(1)).thenReturn(java.util.Optional.of(patientResp));
         when(medicalRecordRepository.findMedicalRecordByPatient(patientResp)).thenReturn(java.util.Optional.of(medicalRecordResp));
@@ -100,9 +157,29 @@ class PatientServiceTest {
     @Test
     void saveMedicalRecord() {
         LocalDate date = LocalDate.parse("1809-02-12");
-        Patient patient = new Patient(1,"Abraham", "Lincoln", "the.greatest@gmail.com", date, "male");
-        MedicalRecord medicalRecordReq = new MedicalRecord("Greg", "test info", date, patient);
-        MedicalRecord medicalRecordResp = new MedicalRecord(2, "Greg", "test info", date, patient);
+        Patient patient = Patient.builder()
+                .id(1)
+                .firstName("Abraham")
+                .lastName("Lincoln")
+                .email("the.greatest@gmail.com")
+                .dob(date)
+                .gender("male")
+                .build();
+
+        MedicalRecord medicalRecordReq = MedicalRecord.builder()
+                .doctorName("Greg")
+                .info("test info")
+                .date(date)
+                .patient(patient)
+                .build();
+
+        MedicalRecord medicalRecordResp = MedicalRecord.builder()
+                .id(2)
+                .doctorName("Greg")
+                .info("test info")
+                .date(date)
+                .patient(patient)
+                .build();
 
         when(patientRepository.findById(1)).thenReturn(java.util.Optional.of(patient));
         when(medicalRecordRepository.save(medicalRecordReq)).thenReturn(medicalRecordResp);

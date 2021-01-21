@@ -6,7 +6,7 @@ POST {{med-record}}/patient
 Content-Type: application/json
 
 {
-  "firstName": "Abraham",
+  "firstName": "a",
   "lastName": "Lincoln",
   "gender": "male",
   "email": "the.greatest@gmail.com",

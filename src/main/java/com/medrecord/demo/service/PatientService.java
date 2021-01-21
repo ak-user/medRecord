@@ -24,7 +24,7 @@ public class PatientService {
         this.medicalRecordRepository = medicalRecordRepository;
     }
 
-    public Patient save(Patient patient) {
+    private void validatePatientByFullNameAndEmail(Patient patient) {
         if (patient.getFirstName().length() < 3) {
             throw new InvalidRequestException("First name must be more than 3 characters");
         }
@@ -36,6 +36,11 @@ public class PatientService {
         if (patient.getEmail().length() < 3) {
             throw new InvalidRequestException("Email must be more than 3 characters");
         }
+    }
+
+    public Patient save(Patient patient) {
+
+        validatePatientByFullNameAndEmail(patient);
 
         Optional<List<Patient>> patientList = patientRepository.findByFirstNameContainingAndLastNameContainingAndDob(
                 patient.getFirstName(),
@@ -66,6 +71,8 @@ public class PatientService {
     }
 
     public ResponseEntity<Patient> updatePatientById(Patient newPatient, Integer id) {
+
+        validatePatientByFullNameAndEmail(newPatient);
 
         Optional<Patient> patientOptional = patientRepository.findById(id);
         if (patientOptional.isEmpty()) {
